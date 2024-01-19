@@ -12,9 +12,6 @@ from functools import wraps
 
 from typing import Optional, Union, Dict, Any, List
 from fastapi import FastAPI, Depends, Response, Request, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Request
-import re
 from fastapi.params import Body, Query, Param
 from fastapi.exceptions import HTTPException, RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
