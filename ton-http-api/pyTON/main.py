@@ -12,6 +12,9 @@ from functools import wraps
 
 from typing import Optional, Union, Dict, Any, List
 from fastapi import FastAPI, Depends, Response, Request, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Request
+import re
 from fastapi.params import Body, Query, Param
 from fastapi.exceptions import HTTPException, RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -110,6 +113,32 @@ app = FastAPI(
     root_path=settings.webserver.api_root_path,
     openapi_tags=tags_metadata
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+allowed_origins_regex = [
+    re.compile(r".*\.delabteam\.com$"),
+    re.compile(r"http://localhost(:\d+)?$"),
+    re.compile(r"http://127\.0\.0\.1(:\d+)?$"),
+    re.compile(r"https://localhost(:\d+)?$"),
+    re.compile(r"https://127\.0\.0\.1(:\d+)?$")
+]
+
+@app.middleware("http")
+async def check_origin(request: Request, call_next):
+    origin = request.headers.get('origin')
+    if any(regex.match(origin) for regex in allowed_origins_regex):
+        response = await call_next(request)
+        return response
+    else:
+        from fastapi.responses import JSONResponse
+        return JSONResponse(content={"error": "Origin not allowed"}, status_code=403)
+
 
 
 tonlib = None
