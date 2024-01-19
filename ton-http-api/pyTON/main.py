@@ -114,20 +114,22 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 
+allowed_origins_regex = [
+    re.compile(r"http://.*\.yourdomain\.com$"),
+    re.compile(r"https://.*\.yourdomain\.com$"),
+    re.compile(r"http://localhost(:\d+)?$"),
+    re.compile(r"https://localhost(:\d+)?$"),
+    re.compile(r"http://127\.0\.0\.1(:\d+)?$"),
+    re.compile(r"https://127\.0\.0\.1(:\d+)?$")
+]
+
+# Настройка CORS для приложения
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Разрешить все методы
+    allow_headers=["*"],  # Разрешить все заголовки
 )
-
-allowed_origins_regex = [
-    re.compile(r".*\.delabteam\.com$"),
-    re.compile(r"http://localhost(:\d+)?$"),
-    re.compile(r"http://127\.0\.0\.1(:\d+)?$"),
-    re.compile(r"https://localhost(:\d+)?$"),
-    re.compile(r"https://127\.0\.0\.1(:\d+)?$")
-]
 
 @app.middleware("http")
 async def check_origin(request: Request, call_next):
@@ -136,6 +138,7 @@ async def check_origin(request: Request, call_next):
         response = await call_next(request)
         return response
     else:
+        # Обработка не разрешенных источников
         from fastapi.responses import JSONResponse
         return JSONResponse(content={"error": "Origin not allowed"}, status_code=403)
 
