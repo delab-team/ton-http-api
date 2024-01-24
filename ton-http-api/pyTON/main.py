@@ -30,6 +30,7 @@ from pytonlib import TonlibException
 
 from loguru import logger
 
+from fastapi.middleware.cors import CORSMiddleware
 
 # inject configuration
 
@@ -108,6 +109,15 @@ app = FastAPI(
     },
     root_path=settings.webserver.api_root_path,
     openapi_tags=tags_metadata
+)
+
+# Разрешить все запросы CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Можете указать список разрешенных источников вместо "*"
+    allow_credentials=True,
+    allow_methods=["*"],  # Разрешить все HTTP методы
+    allow_headers=["*"],  # Разрешить все HTTP заголовки
 )
 
 # allowed_origins_regex = [
