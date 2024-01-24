@@ -1,5 +1,4 @@
-#!/usr/bin/python3
-import os
+#!/usr/bin/python3import os
 import sys
 import json
 import asyncio
@@ -111,34 +110,34 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 
-allowed_origins_regex = [
-    re.compile(r"http://.*\.yourdomain\.com$"),
-    re.compile(r"https://.*\.yourdomain\.com$"),
-    re.compile(r"http://localhost(:\d+)?$"),
-    re.compile(r"https://localhost(:\d+)?$"),
-    re.compile(r"http://127\.0\.0\.1(:\d+)?$"),
-    re.compile(r"https://127\.0\.0\.1(:\d+)?$")
-]
-
-# Настройка CORS для приложения
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=True,
-    allow_methods=["*"],  # Разрешить все методы
-    allow_headers=["*"],  # Разрешить все заголовки
-)
-
-@app.middleware("http")
-async def check_origin(request: Request, call_next):
-    origin = request.headers.get('origin')
-    if any(regex.match(origin) for regex in allowed_origins_regex):
-        response = await call_next(request)
-        return response
-    else:
-        # Обработка не разрешенных источников
-        from fastapi.responses import JSONResponse
-        return JSONResponse(content={"error": "Origin not allowed"}, status_code=403)
-
+# allowed_origins_regex = [
+#     re.compile(r"http://.*\.yourdomain\.com$"),
+#     re.compile(r"https://.*\.yourdomain\.com$"),
+#     re.compile(r"http://localhost(:\d+)?$"),
+#     re.compile(r"https://localhost(:\d+)?$"),
+#     re.compile(r"http://127\.0\.0\.1(:\d+)?$"),
+#     re.compile(r"https://127\.0\.0\.1(:\d+)?$")
+# ]
+#
+# # Настройка CORS для приложения
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_credentials=True,
+#     allow_methods=["*"],  # Разрешить все методы
+#     allow_headers=["*"],  # Разрешить все заголовки
+# )
+#
+# @app.middleware("http")
+# async def check_origin(request: Request, call_next):
+#     origin = request.headers.get('origin')
+#     if any(regex.match(origin) for regex in allowed_origins_regex):
+#         response = await call_next(request)
+#         return response
+#     else:
+#         # Обработка не разрешенных источников
+#         from fastapi.responses import JSONResponse
+#         return JSONResponse(content={"error": "Origin not allowed"}, status_code=403)
+#
 
 
 tonlib = None
