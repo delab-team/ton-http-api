@@ -125,7 +125,7 @@ allowed_origins = [
 # Добавьте middleware CORS с разрешенными источниками
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],  # Разрешить все HTTP методы
     allow_headers=["*"],  # Разрешить все HTTP заголовки
