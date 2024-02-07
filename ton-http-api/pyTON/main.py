@@ -1,5 +1,7 @@
 #!/usr/bin/python3import os
 import sys
+sys.setrecursionlimit(2048)
+
 import json
 import asyncio
 import base64
