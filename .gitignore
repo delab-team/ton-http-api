@@ -121,7 +121,6 @@ venv.bak/
 /logs
 
 .vscode/
-/private
 .DS_Store
 
 /sandbox
